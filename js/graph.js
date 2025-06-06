@@ -31,11 +31,13 @@ class GraphSimple {
             [0, 3, 8],  // Nodo 0 a Nodo 3, 8 segundos
             [1, 2, 6],  // Nodo 1 a Nodo 2, 6 segundos
             [1, 4, 9],  // Nodo 1 a Nodo 4, 9 segundos
+            [2, 3, 4],  // Nono 2 a Nodo 3, 4 segundos
             [2, 5, 7],  // Nodo 2 a Nodo 5, 7 segundos
             [3, 4, 4],  // Nodo 3 a Nodo 4, 4 segundos
             [3, 0, 8],  // Nodo 3 a Nodo 0, 8 segundos (bidireccional)
             [4, 5, 3],  // Nodo 4 a Nodo 5, 3 segundos
             [5, 2, 7]   // Nodo 5 a Nodo 2, 7 segundos (bidireccional)
+            
         ];
         
         // Agregar aristas al grafo (bidireccionales)

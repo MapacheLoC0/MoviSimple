@@ -45,8 +45,11 @@ function registerUser(name, email, password) {
 
     // Guardar en sessionStorage
     sessionStorage.setItem('movisimple_users', JSON.stringify(registeredUsers));
+
+    console.log("Simulación: Añadiendo al archivo users.txt:");
+    console.log(`${name},${email},${password}`);
     return true;
-    
+
 }
 
 // Iniciar sesión
