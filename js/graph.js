@@ -27,16 +27,17 @@ class GraphSimple {
     loadEdges() {
         // Formato: [origen, destino, peso en segundos]
         const edges = [
-            [0, 1, 5],  // Nodo 0 a Nodo 1, 5 segundos
-            [0, 3, 8],  // Nodo 0 a Nodo 3, 8 segundos
-            [1, 2, 6],  // Nodo 1 a Nodo 2, 6 segundos
-            [1, 4, 9],  // Nodo 1 a Nodo 4, 9 segundos
-            [2, 3, 4],  // Nono 2 a Nodo 3, 4 segundos
-            [2, 5, 7],  // Nodo 2 a Nodo 5, 7 segundos
-            [3, 4, 4],  // Nodo 3 a Nodo 4, 4 segundos
-            [3, 0, 8],  // Nodo 3 a Nodo 0, 8 segundos (bidireccional)
-            [4, 5, 3],  // Nodo 4 a Nodo 5, 3 segundos
-            [5, 2, 7]   // Nodo 5 a Nodo 2, 7 segundos (bidireccional)
+            [0, 1, 5],  // Nodo 1 a Nodo 2, 5 segundos
+            [0, 3, 8],  // Nodo 1 a Nodo 4, 8 segundos
+            [0, 4, 7],  // Nodo 1 a Nodo 5, 7 segundos
+            [1, 2, 6],  // Nodo 2 a Nodo 3, 6 segundos
+            [1, 4, 9],  // Nodo 2 a Nodo 5, 9 segundos
+            [2, 3, 4],  // Nono 3 a Nodo 4, 4 segundos
+            [2, 5, 7],  // Nodo 3 a Nodo 6, 7 segundos
+            [3, 4, 4],  // Nodo 4 a Nodo 5, 4 segundos
+            [3, 0, 8],  // Nodo 4 a Nodo 1, 8 segundos (bidireccional)
+            [4, 5, 3],  // Nodo 5 a Nodo 6, 3 segundos
+            [5, 2, 7]   // Nodo 6 a Nodo 3, 7 segundos (bidireccional)
             
         ];
         
@@ -410,12 +411,18 @@ function calculateRoute() {
         routeInfo.classList.remove('hidden');
     }
     
-    // Iniciar animación
+    // Iniciar animación con el nuevo método
     animateRoute(path, totalTime);
 }
 
+// Variable para controlar la animación
+let animationInProgress = false;
+
 // Función para animar la ruta
 function animateRoute(path, totalTime) {
+    // Indicar que la animación está en progreso
+    animationInProgress = true;
+    
     const routeResults = document.getElementById('route-results');
     const progressFill = document.getElementById('progress-fill');
     const progressText = document.getElementById('progress-text');
@@ -462,12 +469,15 @@ function animateRoute(path, totalTime) {
         } else {
             // Mostrar resultados al finalizar
             showResults(totalTime);
+            // Indicar que la animación ha terminado
+            animationInProgress = false;
         }
     }
     
     // Iniciar animación
     requestAnimationFrame(animate);
 }
+
 
 // Función para mostrar resultados
 function showResults(totalTime) {
@@ -488,6 +498,12 @@ function showResults(totalTime) {
 
 // Función para reiniciar la ruta
 function resetRoute() {
+    // Si hay una animación en progreso, no hacer nada
+    if (animationInProgress) {
+        showMessage('Hay una animación en progreso. Espera a que termine.', true);
+        return;
+    }
+    
     const originSelect = document.getElementById('origin-select');
     const destinationSelect = document.getElementById('destination-select');
     const routeInfo = document.getElementById('route-info');
@@ -510,3 +526,4 @@ function resetRoute() {
     // Limpiar visualizador
     if (visualizer) visualizer.clear();
 }
+
