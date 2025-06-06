@@ -6,6 +6,18 @@
 // Usuarios registrados (en memoria durante la sesión)
 let registeredUsers = [];
 
+// Cargar usuarios registrados desde sessionStorage
+const storedUsers = sessionStorage.getItem('movisimple_users');
+if (storedUsers) {
+    try {
+        registeredUsers = JSON.parse(storedUsers);
+    } catch (e) {
+        console.error("Error al cargar usuarios:", e);
+        registeredUsers = [];
+    }
+}
+
+
 // Usuario actual
 let currentUser = null;
 
@@ -30,7 +42,11 @@ function registerUser(name, email, password) {
 
     // Agregar a la lista
     registeredUsers.push(newUser);
+
+    // Guardar en sessionStorage
+    sessionStorage.setItem('movisimple_users', JSON.stringify(registeredUsers));
     return true;
+    
 }
 
 // Iniciar sesión
