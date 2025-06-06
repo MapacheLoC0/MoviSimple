@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MoviSimple - Iniciar Sesión</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="auth-page">
+        <div class="auth-container">
+            <div class="auth-header">
+                <a href="index.html" class="back-btn">&larr;</a>
+                <h2>Iniciar Sesión</h2>
+            </div>
+            <div id="message-container"></div>
+            <form id="login-form" class="auth-form">
+                <div class="form-group">
+                    <label for="login-email">Correo electrónico</label>
+                    <input type="email" id="login-email" placeholder="Ingresa tu correo" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Contraseña</label>
+                    <input type="password" id="login-password" placeholder="Ingresa tu contraseña" required>
+                </div>
+                <button type="submit" class="btn primary-btn">Iniciar Sesión</button>
+            </form>
+            <p class="auth-link">¿No tienes una cuenta? <a href="register.html">Registrarse</a></p>
+        </div>
+    </div>
+
+    <script src="js/session.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginForm = document.getElementById('login-form');
+            const messageContainer = document.getElementById('message-container');
+            
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const email = document.getElementById('login-email').value.trim();
+                const password = document.getElementById('login-password').value;
+                
+                if (!email || !password) {
+                    showMessage('Todos los campos son obligatorios', true);
+                    return;
+                }
+                
+                try {
+                    // Intentar iniciar sesión
+                    const user = loginUser(email, password);
+                    
+                    showMessage('Inicio de sesión exitoso. Redirigiendo...');
+                    
+                    // Limpiar formulario
+                    loginForm.reset();
+                    
+                    // Redirigir a la pantalla principal
+                    setTimeout(() => {
+                        window.location.href = 'main.html';
+                    }, 1000);
+                } catch (error) {
+                    showMessage(error.message, true);
+                }
+            });
+            
+            function showMessage(message, isError = false) {
+                messageContainer.innerHTML = '';
+                const messageElement = document.createElement('div');
+                messageElement.className = `message ${isError ? 'error' : 'success'}`;
+                messageElement.textContent = message;
+                messageContainer.appendChild(messageElement);
+                
+                // Eliminar mensaje después de 5 segundos
+                setTimeout(() => {
+                    messageElement.remove();
+                }, 5000);
+            }
+        });
+    </script>
+</body>
+</html>

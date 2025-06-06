@@ -1,49 +1,8 @@
 /**
- * Aplicación MoviSimple - Versión simplificada
- * Implementación del algoritmo de Dijkstra para estructura de datos
+ * Implementación del grafo y algoritmo de Dijkstra para MoviSimple
  */
 
-// Función para mostrar una pantalla específica
-function showScreen(screenId) {
-    // Ocultar todas las pantallas
-    document.querySelectorAll('.screen').forEach(screen => {
-        screen.classList.remove('active');
-    });
-    
-    // Mostrar la pantalla solicitada
-    document.getElementById(screenId).classList.add('active');
-}
-
-// Función para mostrar mensajes
-function showMessage(message, isError = false, parentElement = null) {
-    // Eliminar mensajes anteriores
-    document.querySelectorAll('.message').forEach(msg => msg.remove());
-    
-    // Crear nuevo mensaje
-    const messageElement = document.createElement('div');
-    messageElement.className = `message ${isError ? 'error' : 'success'}`;
-    messageElement.textContent = message;
-    
-    // Insertar mensaje en el elemento padre o en la sección de ruta
-    if (parentElement) {
-        parentElement.insertBefore(messageElement, parentElement.firstChild);
-    } else {
-        const routeSection = document.querySelector('.route-section');
-        if (routeSection) {
-            routeSection.insertBefore(messageElement, routeSection.querySelector('.route-selection'));
-        }
-    }
-    
-    // Eliminar mensaje después de 5 segundos
-    setTimeout(() => {
-        messageElement.remove();
-    }, 5000);
-}
-
-/**
- * Clase GraphSimple para modelar el grafo de seis nodos
- * Implementa el algoritmo de Dijkstra simple para calcular rutas mínimas
- */
+// Clase GraphSimple para modelar el grafo de seis nodos
 class GraphSimple {
     constructor() {
         // Inicializar grafo con 6 nodos
@@ -179,9 +138,7 @@ class GraphSimple {
     }
 }
 
-/**
- * Clase para manejar la visualización del grafo
- */
+// Clase para manejar la visualización del grafo
 class GraphVisualizer {
     constructor(canvasId, graph) {
         this.canvas = document.getElementById(canvasId);
