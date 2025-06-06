@@ -1,4 +1,16 @@
-/* Paleta de colores pastel derivada del azul */
+.logo-icon {
+    width: 50px;
+    height: 50px;
+    background-color: var(--primary-blue); /* azul pastel */
+    color: var(--white);
+    border-radius: 50%; /* círculo */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin-right: 1rem;
+}/* Paleta de colores pastel derivada del azul */
 :root {
     --primary-blue: #a0c4ff;      /* Azul pastel principal */
     --secondary-blue: #bdb2ff;    /* Azul-violeta pastel */
@@ -338,9 +350,13 @@ h1, h2, h3 {
     padding: 1rem;
     display: flex;
     justify-content: center;
+    align-items: center;
+    min-height: 450px;
 }
 
 canvas {
+    display: block;
+    margin: 0 auto;
     max-width: 100%;
     height: auto;
     background-color: var(--white);

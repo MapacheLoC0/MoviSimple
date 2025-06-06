@@ -418,7 +418,7 @@ function calculateRoute() {
 // Variable para controlar la animación
 let animationInProgress = false;
 
-// Función para animar la ruta
+// Función para animar la ruta con desplazamiento visual
 function animateRoute(path, totalTime) {
     // Indicar que la animación está en progreso
     animationInProgress = true;
@@ -439,44 +439,90 @@ function animateRoute(path, totalTime) {
     // Obtener las aristas de la ruta
     const pathEdges = graph.getPathEdges(path);
     
-    // Tiempo transcurrido
-    let elapsedTime = 0;
+    // Crear un marcador de posición para la animación
+    const canvas = document.getElementById('graph-canvas');
+    const ctx = canvas.getContext('2d');
     
-    // Duración de la animación (en milisegundos)
-    // Usamos un factor de escala para que la animación no sea muy larga
-    const scaleFactor = 0.3; // Ajustar según necesidad
+    // Duración total de la animación (en milisegundos)
+    const scaleFactor = 0.5; // Ajustar según necesidad
     const animationDuration = totalTime * 1000 * scaleFactor;
     
     // Tiempo de inicio
     const startTime = Date.now();
     
+    // Posición actual del marcador
+    let currentPosition = { 
+        x: graph.nodePositions[path[0]].x, 
+        y: graph.nodePositions[path[0]].y 
+    };
+    
+    // Nodo actual en la ruta
+    let currentNodeIndex = 0;
+    
     // Función de animación
     function animate() {
         // Calcular tiempo transcurrido
         const currentTime = Date.now();
-        elapsedTime = currentTime - startTime;
+        const elapsedTime = currentTime - startTime;
         
-        // Calcular progreso (0 a 1)
-        const progress = Math.min(elapsedTime / animationDuration, 1);
+        // Calcular progreso global (0 a 1)
+        const globalProgress = Math.min(elapsedTime / animationDuration, 1);
         
         // Actualizar barra de progreso
-        if (progressFill) progressFill.style.width = `${progress * 100}%`;
-        if (progressText) progressText.textContent = `${Math.round(progress * 100)}%`;
+        if (progressFill) progressFill.style.width = `${globalProgress * 100}%`;
+        if (progressText) progressText.textContent = `${Math.round(globalProgress * 100)}%`;
+        
+        // Calcular en qué segmento de la ruta estamos
+        const totalSegments = path.length - 1;
+        const segmentProgress = globalProgress * totalSegments;
+        const currentSegment = Math.min(Math.floor(segmentProgress), totalSegments - 1);
+        const segmentLocalProgress = segmentProgress - currentSegment;
+        
+        // Si hemos cambiado de segmento
+        if (currentSegment > currentNodeIndex) {
+            currentNodeIndex = currentSegment;
+        }
+        
+        // Calcular la posición actual interpolando entre nodos
+        const fromNode = path[currentSegment];
+        const toNode = path[currentSegment + 1];
+        const fromPos = graph.nodePositions[fromNode];
+        const toPos = graph.nodePositions[toNode];
+        
+        currentPosition = {
+            x: fromPos.x + (toPos.x - fromPos.x) * segmentLocalProgress,
+            y: fromPos.y + (toPos.y - fromPos.y) * segmentLocalProgress
+        };
+        
+        // Redibujar el grafo
+        visualizer.draw();
+        
+        // Dibujar el marcador de posición (un círculo que se mueve)
+        ctx.fillStyle = '#9D01E0';
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(currentPosition.x, currentPosition.y, 12, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
         
         // Si la animación no ha terminado, continuar
-        if (progress < 1) {
+        if (globalProgress < 1) {
             requestAnimationFrame(animate);
         } else {
             // Mostrar resultados al finalizar
             showResults(totalTime);
             // Indicar que la animación ha terminado
             animationInProgress = false;
+            // Redibujar el grafo una última vez sin el marcador
+            visualizer.draw();
         }
     }
     
     // Iniciar animación
     requestAnimationFrame(animate);
 }
+
 
 
 // Función para mostrar resultados
