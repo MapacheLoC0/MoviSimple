@@ -1,7 +1,4 @@
-/**
- * Implementación del grafo y algoritmo de Dijkstra para MoviSimple
- */
-
+//Implementación del grafo y algoritmo de Dijkstra para MoviSimple
 // Clase GraphSimple para modelar el grafo de seis nodos
 class GraphSimple {
     constructor() {
